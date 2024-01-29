@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Access Broker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Custom CSS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <header class="text-white text-center header-background">
+        <div class="container">
+            <h1 class="header-title">Data Access Broker</h1>
+            <p class="header-subtitle">Manage and Access Data Efficiently</p>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">FAQ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-5">
+    <div class="content-area bg-white p-4 shadow-sm">
+        <div class="col-lg-12 mx-auto">
+            <!-- DOI Submission Area -->
+            <h2 class="mb-4">Enter DOIs</h2>
+            <form id="doiForm" action="/process_doi" method="post" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="doilist">List of DOIs (separated by commas)</label>
+                    <textarea class="form-control" id="doilist" name="doilist" rows="6" onpaste="autoFormat()"></textarea>
+                    <small id="doiHelp" class="form-text text-muted">Paste your DOIs here.</small>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+
+            <!-- DOI Metadata Display -->
+            <div id="metadataContainer" class="mt-4"></div>
+
+            <!-- Access Request Button -->
+            <button id="requestAccessBtn" class="btn btn-primary mt-3" disabled>Request Access to Selected Data</button>
+        </div>
+    </div>
+</main>
+
+    <footer class="footer mt-5 py-3 bg-dark text-white">
+        <div class="container text-center">
+            <span class="text-muted">Your Company Name © 2023</span>
+        </div>
+    </footer>
+    
+    <script>
+    function autoFormat() {
+        setTimeout(function() {
+            var doisInput = document.getElementById("doilist");
+            var dois = doisInput.value.replace(/\s/g, "").split(",");
+            var formattedDOIs = dois.join(", ");
+            doisInput.value = formattedDOIs;
+        }, 100);
+    }
+
+    function validateForm() {
+        var doisInput = document.getElementById("doilist");
+        var dois = doisInput.value.split(",");
+        for (var i = 0; i < dois.length; i++) {
+            var doi = dois[i].trim();
+            if (!/^10\.\d{4,9}\/[-._;()/:A-Z0-9]+$/i.test(doi)) {
+                alert("Invalid DOI format: " + doi);
+                return false;
+            }
+        }
+        processDOIs(dois);
+        return false;
+    }
+
+    function processDOIs(dois) {
+        var container = document.getElementById("metadataContainer");
+        container.innerHTML = ""; // Clear previous results
+
+        for (var i = 0; i < dois.length; i++) {
+            var doi = dois[i].trim();
+
+            // Simulated metadata for demonstration
+            var metadata = {
+                title: "Dataset Title " + i,
+                author: "Author " + i,
+                description: "Description " + i
+            };
+
+            var html = `
+                <div class="card mt-2">
+                    <div class="card-header" id="heading${i}">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="false" aria-controls="collapse${i}">
+                                DOI: ${doi}
+                            </button>
+                        </h5>
+                    </div>
+
+                    <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#metadataContainer">
+                        <div class="card-body">
+                            <h5 class="card-title">${metadata.title}</h5>
+                            <p class="card-text">Author: ${metadata.author}</p>
+                            <p class="card-text">Description: ${metadata.description}</p>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck${i}" onchange="updateRequestButton()">
+                                <label class="form-check-label" for="defaultCheck${i}">
+                                    Select for Access
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            `;
+
+            container.innerHTML += html;
+        }
+    }
+    function updateRequestButton() {
+        var checkboxes = document.querySelectorAll('.form-check-input');
+        var anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        document.getElementById('requestAccessBtn').disabled = !anyChecked;
+    }
+</script>
+
+    
+</body>
+</html>
+

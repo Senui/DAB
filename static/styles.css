@@ -1,0 +1,74 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    padding: 40px 0;
+    background: linear-gradient(rgba(0, 56, 179, 0.7), rgba(0, 56, 179, 0.7)), url('header-bg.jpg') no-repeat center center;
+    background-size: cover;
+    border-bottom: 3px solid #004080;
+}
+
+.header-background {
+    /* If you don't have a background image, the gradient will be sufficient */
+    background: linear-gradient(to right, #0066cc, #0099ff);
+}
+
+.header-title {
+    font-size: 2.5rem; /* Larger font size for the title */
+    margin-bottom: 0.5rem;
+}
+
+.header-subtitle {
+    font-size: 1.2rem; /* Subtitle with smaller font size */
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #fff;
+}
+
+.nav-link {
+    color: #ddd !important;
+}
+
+.nav-link:hover {
+    color: #fff !important;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.footer {
+    background-color: #343a40;
+    border-top: 3px solid #2c2f33; /* Add a top border */
+}
+
+.form-control {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+.content-area {
+    background-color: #fff; /* White background for content */
+    border: 1px solid #ddd; /* Add border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 20px;
+}
+
+.card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #e9ecef;
+}
